@@ -81,14 +81,14 @@ end
 assign PIN_1 = hsync;
 assign PIN_2 = vsync;
 
-assign PIN_3  = 
-assign PIN_4  = 
-assign PIN_5  = 
-assign PIN_6  = 
-assign PIN_7  = 
-assign PIN_8  = 
-assign PIN_9  = 
-assign PIN_10 = 
+assign PIN_3  = 0;
+assign PIN_4  = 0;
+assign PIN_5  = 0;
+assign PIN_6  = 0;
+assign PIN_7  = 0;
+assign PIN_8  = 0;
+assign PIN_9  = 0;
+assign PIN_10 = 0;
 
 
 endmodule
