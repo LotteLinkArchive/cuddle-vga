@@ -81,7 +81,7 @@ always @(posedge pclk)begin
 	end
 	
 	//get pixel
-	if (hsync && vsync)begin
+	if (hblank && vblank)begin
 		pixel <= vbuf[hcount>>3][vcount>>3];
 	end else begin
 		pixel <= 8'b0;
