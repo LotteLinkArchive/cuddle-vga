@@ -28,6 +28,10 @@ reg vblank; //blanking intervals
 reg hsync;
 reg vsync; //sync pulses
 
+// TODO: instantiate block ram instead of using a wacky array
+reg [7:0] vbuf [79:0][59:0]; //video buffer
+reg [7:0] pixel; //current pixel
+
 //pll configuration for 36mhz pixel clock
 SB_PLL40_CORE#(
 		.FEEDBACK_PATH("SIMPLE"),
@@ -76,19 +80,25 @@ always @(posedge pclk)begin
 		vsync <= 1'b1;
 	end
 	
+	//get pixel
+	if (hsync && vsync)begin
+		pixel <= vbuf[hcount>>3][vcount>>3];
+	end else begin
+		pixel <= 8'b0;
+	end
+	
 end
 
 assign PIN_1 = hsync;
 assign PIN_2 = vsync;
 
-assign PIN_3  = 0;
-assign PIN_4  = 0;
-assign PIN_5  = 0;
-assign PIN_6  = 0;
-assign PIN_7  = 0;
-assign PIN_8  = 0;
-assign PIN_9  = 0;
-assign PIN_10 = 0;
-
+assign PIN_3  = pixel[0];
+assign PIN_4  = pixel[1];
+assign PIN_5  = pixel[2];
+assign PIN_6  = pixel[3];
+assign PIN_7  = pixel[4];
+assign PIN_8  = pixel[5];
+assign PIN_9  = pixel[6];
+assign PIN_10 = pixel[7];
 
 endmodule
