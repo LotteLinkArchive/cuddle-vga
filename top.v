@@ -28,7 +28,6 @@ reg vblank; //blanking intervals
 reg hsync;
 reg vsync; //sync pulses
 
-// TODO: instantiate block ram instead of using a wacky array
 reg [7:0] vbuf [79:0][59:0]; //video buffer
 reg [7:0] pixel; //current pixel
 
@@ -82,7 +81,7 @@ always @(posedge pclk)begin
 	
 	//get pixel
 	if (hblank && vblank)begin
-		pixel <= vbuf[hcount>>3][vcount>>3];
+		pixel <= vbuf[hcount[9:2]][vcount[8:2]];
 	end else begin
 		pixel <= 8'b0;
 	end
