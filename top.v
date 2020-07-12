@@ -31,6 +31,11 @@ reg vsync; //sync pulses
 reg [7:0] vbuf [79:0][59:0]; //video buffer
 reg [7:0] pixel; //current pixel
 
+//shove an image into the video buffer
+initial begin
+	$readmemh("pic.txt",vbuf);
+end
+
 //pll configuration for 36mhz pixel clock
 SB_PLL40_CORE#(
 		.FEEDBACK_PATH("SIMPLE"),
