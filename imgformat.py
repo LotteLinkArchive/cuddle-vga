@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from PIL import Image
-import string, argparse
+import string, argparse, itertools
 
 def main():
 	parser = argparse.ArgumentParser(description='Convert image to thingy')
@@ -18,19 +18,18 @@ def main():
 	pic_pixels = Image.open(args.input).convert('RGB').load()
 	output_pic = open(args.output,'w')
 	
-	for y in range(args.height):
-		for x in range(args.width):
-			pixel = pic_pixels[x,y]
-			byte_out = (
-				((pixel[0] & 0b11100000) >> 5) |
-				((pixel[1] & 0b11100000) >> 2) |
-				((pixel[2] & 0b11000000)     )
-			)
+	for y, x in itertools.product(range(args.height), range(args.width)):
+		pixel = pic_pixels[x,y]
+		byte_out = (
+			((pixel[0] & 0b11100000) >> 5) |
+			((pixel[1] & 0b11100000) >> 2) |
+			((pixel[2] & 0b11000000)     )
+		)
 
-			output_pic.write(''.join((
-				string.hexdigits[(byte_out & 0b11110000) >> 4],
-				string.hexdigits[(byte_out & 0b00001111)     ], ' '
-			)))
+		output_pic.write(''.join((
+			string.hexdigits[(byte_out & 0b11110000) >> 4],
+			string.hexdigits[(byte_out & 0b00001111)     ], ' '
+		)))
 	
 	output_pic.close()
 	
