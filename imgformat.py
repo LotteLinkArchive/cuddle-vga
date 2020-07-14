@@ -1,17 +1,25 @@
 #!/usr/bin/python
 
 from PIL import Image
-
-hexchars = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+import string, argparse
 
 def main():
+	parser = argparse.ArgumentParser(description='Convert image to thingy')
+	parser.add_argument('input', type=str, help='Input image file')
+	parser.add_argument('output', type=str, help='Output file')
+	parser.add_argument(
+		'--width', type=int, default=80, help='Image width (default:80)')
+	parser.add_argument(
+		'--height', type=int, default=60, help='Image height (default:60)')
+	args = parser.parse_args()
 	
-	input_pic = Image.open('pic.png')
-	output_string = ''
+	input_pic = Image.open(args.input).convert('RGBA')
 	pic_pixels = input_pic.load()
 	
-	for y in range(60):
-		for x in range(80):
+	output_pic = open(args.output,'w')
+	
+	for y in range(args.height):
+		for x in range(args.width):
 			pixel = pic_pixels[x,y]
 			byte_out = 0
 			
@@ -30,15 +38,13 @@ def main():
 			upper_nibble >>= 4
 			lower_nibble = byte_out & 0b00001111
 			
-			ascii_out = hexchars[upper_nibble] + hexchars[lower_nibble]
-			output_string += ascii_out + ' '
+			output_pic.write(''.join((
+				string.hexdigits[upper_nibble],
+				string.hexdigits[lower_nibble],
+				' '
+			)))
 	
-	
-	del input_pic
-	
-	output_pic = open('pic.txt','wb')
-	output_pic.write(output_string)
 	output_pic.close()
 	
-if (__name__=='__main__'):
+if __name__ == '__main__':
 	main()
