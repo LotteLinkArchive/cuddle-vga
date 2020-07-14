@@ -5,17 +5,17 @@ import string, argparse
 
 def main():
 	parser = argparse.ArgumentParser(description='Convert image to thingy')
-	parser.add_argument('input', type=str, help='Input image file')
+	
+	parser.add_argument('input' , type=str, help='Input image file')
 	parser.add_argument('output', type=str, help='Output file')
 	parser.add_argument(
-		'--width', type=int, default=80, help='Image width (default:80)')
+		'--width' , type=int, default=80, help='Image width  (default:80)')
 	parser.add_argument(
 		'--height', type=int, default=60, help='Image height (default:60)')
+		
 	args = parser.parse_args()
 	
-	input_pic = Image.open(args.input).convert('RGB')
-	pic_pixels = input_pic.load()
-	
+	pic_pixels = Image.open(args.input).convert('RGB').load()
 	output_pic = open(args.output,'w')
 	
 	for y in range(args.height):
