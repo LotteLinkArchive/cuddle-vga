@@ -13,7 +13,7 @@ def main():
 		'--height', type=int, default=60, help='Image height (default:60)')
 	args = parser.parse_args()
 	
-	input_pic = Image.open(args.input).convert('RGBA')
+	input_pic = Image.open(args.input).convert('RGB')
 	pic_pixels = input_pic.load()
 	
 	output_pic = open(args.output,'w')
@@ -21,27 +21,15 @@ def main():
 	for y in range(args.height):
 		for x in range(args.width):
 			pixel = pic_pixels[x,y]
-			byte_out = 0
-			
-			col_r = pixel[0] & 0b11100000
-			col_r >>= 5
-			byte_out |= col_r
-			
-			col_g = pixel[1] & 0b11100000
-			col_g >>= 2
-			byte_out |= col_g
-			
-			col_b = pixel[2] & 0b11000000
-			byte_out |= col_b
-			
-			upper_nibble = byte_out & 0b11110000
-			upper_nibble >>= 4
-			lower_nibble = byte_out & 0b00001111
-			
+			byte_out = (
+				((pixel[0] & 0b11100000) >> 5) |
+				((pixel[1] & 0b11100000) >> 2) |
+				((pixel[2] & 0b11000000)     )
+			)
+
 			output_pic.write(''.join((
-				string.hexdigits[upper_nibble],
-				string.hexdigits[lower_nibble],
-				' '
+				string.hexdigits[(byte_out & 0b11110000) >> 4],
+				string.hexdigits[(byte_out & 0b00001111)     ], ' '
 			)))
 	
 	output_pic.close()
